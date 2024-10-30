@@ -9,6 +9,8 @@ class Game < ApplicationRecord
   enum :status, [:waiting, :playing, :finished]
   enum :phase, [:dawn, :discussion, :voting, :action, :night]
 
+  has_many :players
+
   before_validation :generate_unique_code
 
   def begin
@@ -54,7 +56,7 @@ class Game < ApplicationRecord
   end
 
   def unfinished_game_with_code_exists?
-    Game.where(code: code).where(status: [:waiting, :playing]).exists?
+    Game.where(code:).where(status: [:waiting, :playing]).exists?
   end
 end
 

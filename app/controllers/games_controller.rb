@@ -13,7 +13,7 @@ class GamesController < ApplicationController
     if @game.save
       redirect_to @game, notice: "Game was successfully created."
     else
-      render :new
+      render json: @game.errors, status: :unprocessable_entity
     end
   end
 

@@ -6,7 +6,7 @@ RSpec.describe GamesController, type: :controller do
   describe "GET #show" do
     let(:game) { Game.create(code: "testcode", status: :waiting, day: 1, phase: :dawn) }
 
-    it "retrieves the game and renders the show template" do
+    it "retrieves the game and returns as json" do
       get :show, params: {id: game.id}
       expect(response).to have_http_status(:success)
       expect(assigns(:game)).to eq(game)
