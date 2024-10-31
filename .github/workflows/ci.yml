@@ -50,13 +50,20 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
-      - name: Lint code for consistent style
-        run: bin/rubocop -f github
+      - name: Lint code using rubocop standard for consistent style
+        run: rake standard
 
   test:
     runs-on: ubuntu-latest
 
-    # services:
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+          - 3306:3306
+        options: --health-cmd "mysqladmin ping" --health-interval 10s --health-timeout 5s --health-retries 5
     #  redis:
     #    image: redis
     #    ports:
@@ -79,7 +86,7 @@ jobs:
         env:
           RAILS_ENV: test
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: bin/rails db:test:prepare | bundle exec rspec spec
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4
